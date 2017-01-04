@@ -139,7 +139,7 @@ bool Sudoku::addNumber(int y, int x, int num)
 		return false;
 
 	if(vertical[y].checkNumber(num) && horizontal[x].checkNumber(num) 
-		&& box[(y/sqrt_y)*3+(x/sqrt_x)].checkNumber(num))
+		&& box[(y/sqrt_y)*sqrt_x+(x/sqrt_x)].checkNumber(num))
 	{
 		sudoku[y][x] = num;
 		return true;

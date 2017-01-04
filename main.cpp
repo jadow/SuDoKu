@@ -49,6 +49,7 @@ bool tryBackTrackSolve(Sudoku& target, int y=0, int x=0)
 int main()
 {
 	Sudoku sudoku;
+
 	sudoku.addNumber(0,0,5);
 	sudoku.addNumber(0,1,3);
 	sudoku.addNumber(1,0,6);
