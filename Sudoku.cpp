@@ -8,15 +8,15 @@ section::section()
 
 section::section(std::vector<int*> target)
 {
-	members = target;
-	solved = 0;
-	for(int i = 1; i <= target.size(); i++)
-		solved += i;
+	members=target;
+	solved=0;
+	for(int i=1; i<=target.size(); i++)
+		solved+=i;
 }
 
 bool section::checkNumber(int num)
 {
-	for(int i =0; i<members.size(); i++)
+	for(int i=0; i<members.size(); i++)
 	{
 		if(num == *members[i])
 			return false;
@@ -27,9 +27,9 @@ bool section::checkNumber(int num)
 
 bool section::checkSolved()
 {
-	int total = 0;
-	for(int i =0; i<members.size(); i++)
-		total += *members[i];
+	int total=0;
+	for(int i=0; i<members.size(); i++)
+		total+=*members[i];
 
 	return (total == solved);
 }
@@ -84,7 +84,7 @@ void Sudoku::initBoxes()
 		section square(tempt);
 		box.push_back(square);
 
-		if((baseX+=sqrt_x)==x)
+		if((baseX+=sqrt_x) == x)
 		{
 			baseX=0;
 			baseY+=sqrt_y;
@@ -94,42 +94,42 @@ void Sudoku::initBoxes()
 
 bool Sudoku::valid_x(int x)
 {
-	return !(x < 0 || x>this->x);
+	return !(x<0 || x>this->x);
 }
 bool Sudoku::valid_y(int y)
 {
-	return !(y < 0 || y>this->y);
+	return !(y<0 || y>this->y);
 }
 bool Sudoku::valid_num(int num)
 {
-	return !(num < 0 || num>this->x || num>this->y);
+	return !(num<0 || num>this->x || num>this->y);
 }
 
 Sudoku::Sudoku(int size)
 {
 	double intpart;
-	double sqrt_size = sqrt((double)size);
+	double sqrt_size=sqrt((double)size);
 	//size should be a square number
-	if(size < 0 || modf(sqrt_size, &intpart))
+	if(size<0 || modf(sqrt_size, &intpart))
 	{
-		size = 9;
+		size=9;
 	}
 	
-	x = size;
-	y = size;
-	boxes = size;
-	sqrt_x = sqrt_size;
-	sqrt_y = sqrt_size;
+	x=size;
+	y=size;
+	boxes=size;
+	sqrt_x=sqrt_size;
+	sqrt_y=sqrt_size;
 	init();
 }
 
 Sudoku::Sudoku()
 {
-	x = 9;
-	y = 9;
-	boxes = 9;
-	sqrt_x = 3;
-	sqrt_y = 3;
+	x=9;
+	y=9;
+	boxes=9;
+	sqrt_x=3;
+	sqrt_y=3;
 	init();
 }
 
@@ -151,8 +151,8 @@ bool Sudoku::removeNumber(int y, int x)
 {	
 	if(!valid_x(x) || !valid_y(y))
 		return false;
-
-	sudoku[y][x] = 0;
+	
+	sudoku[y][x]=0;
 	return true;
 }
 int Sudoku::getNumber(int y, int x)
@@ -170,13 +170,11 @@ int Sudoku::getVerticalMax()
 	return y;
 }
 
-
 int Sudoku::getMaxValue()
 {
 	//for now
 	return y;
 }
-
 
 bool Sudoku::checkSolved()
 {

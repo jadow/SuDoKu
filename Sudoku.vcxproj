@@ -76,8 +76,10 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sudoku.cpp" />
+    <ClCompile Include="SudokuSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SudokuSolver.h" />
     <ClInclude Include="Sudoku.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
