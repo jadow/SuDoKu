@@ -17,8 +17,10 @@ section::section(std::vector<int*> target)
 bool section::checkNumber(int num)
 {
 	for(int i =0; i<members.size(); i++)
+	{
 		if(num == *members[i])
 			return false;
+	}
 
 	return true;
 }
@@ -29,7 +31,7 @@ bool section::checkSolved()
 	for(int i =0; i<members.size(); i++)
 		total += *members[i];
 
-	return (total == solved) ? true : false;
+	return (total == solved);
 }
 
 void Sudoku::init()
@@ -92,15 +94,15 @@ void Sudoku::initBoxes()
 
 bool Sudoku::valid_x(int x)
 {
-	return (x < 0 || x>this->x) ? false : true;
+	return !(x < 0 || x>this->x);
 }
 bool Sudoku::valid_y(int y)
 {
-	return (y < 0 || y>this->y) ? false : true;
+	return !(y < 0 || y>this->y);
 }
 bool Sudoku::valid_num(int num)
 {
-	return (num < 0 || num>this->x || num>this->y) ? false : true;
+	return !(num < 0 || num>this->x || num>this->y);
 }
 
 Sudoku::Sudoku(int size)
@@ -168,6 +170,14 @@ int Sudoku::getVerticalMax()
 	return y;
 }
 
+
+int Sudoku::getMaxValue()
+{
+	//for now
+	return y;
+}
+
+
 bool Sudoku::checkSolved()
 {
 	for(int i=0; i<y; i++)
@@ -183,16 +193,4 @@ bool Sudoku::checkSolved()
 			return false;
 
 	return true;
-}
-
-#include <stdio.h>
-void Sudoku::printed()
-{
-	for(int i=0; i<y; i++)
-	{	
-		for(int j=0; j<x; j++)
-			printf("%d ", sudoku[i][j]);
-
-		printf("\n");
-	}
 }

@@ -2,104 +2,94 @@
 
 #include <stdio.h>
 
+void getNext(int max_x, int& y, int& x)
+{
+	if(++x == max_x)
+	{
+		x=0;
+		y++;
+	}
+}
+
+bool tryBackTrackSolve(Sudoku& target, int y=0, int x=0)
+{
+	if(target.checkSolved())
+	{
+		return true;
+	}
+	else if(!target.getNumber(y,x))
+	{
+		//assuming that sudoku is square
+		for(int i =1; i <= target.getMaxValue(); i ++)
+		{
+			
+			if(!target.addNumber(y, x, i))
+				continue;
+			
+			int saveX=x, saveY=y;
+
+			getNext(target.getHorizontalMax(), y, x);
+			if(tryBackTrackSolve(target, y, x))
+				return true;
+					
+			x=saveX;
+			y=saveY;
+
+			target.removeNumber(y, x);	
+		}
+		return false;
+	}
+	else    
+	{
+		getNext(target.getHorizontalMax(), y, x);
+		return tryBackTrackSolve(target, y, x);
+    }    
+}
+
 int main()
 {
-	Sudoku soduku;
-	
-	soduku.addNumber(0,0,2);
-	soduku.addNumber(0,1,9);
-	soduku.addNumber(0,2,5);
-	soduku.addNumber(0,3,7);
-	soduku.addNumber(0,4,4);
-	soduku.addNumber(0,5,3);
-	soduku.addNumber(0,6,8);
-	soduku.addNumber(0,7,6);
-	soduku.addNumber(0,8,1);
-	
-	soduku.addNumber(1,0,4);
-	soduku.addNumber(1,1,3);
-	soduku.addNumber(1,2,1);
-	soduku.addNumber(1,3,8);
-	soduku.addNumber(1,4,6);
-	soduku.addNumber(1,5,5);
-	soduku.addNumber(1,6,9);
-	soduku.addNumber(1,7,2);
-	soduku.addNumber(1,8,7);
-	
-	soduku.addNumber(2,0,8);
-	soduku.addNumber(2,1,7);
-	soduku.addNumber(2,2,6);
-	soduku.addNumber(2,3,1);
-	soduku.addNumber(2,4,9);
-	soduku.addNumber(2,5,2);
-	soduku.addNumber(2,6,5);
-	soduku.addNumber(2,7,4);
-	soduku.addNumber(2,8,3);
+	Sudoku sudoku;
+	sudoku.addNumber(0,0,5);
+	sudoku.addNumber(0,1,3);
+	sudoku.addNumber(1,0,6);
+	sudoku.addNumber(2,1,9);
+	sudoku.addNumber(2,2,8);
 
-	soduku.addNumber(3,0,3);
-	soduku.addNumber(3,1,8);
-	soduku.addNumber(3,2,7);
-	soduku.addNumber(3,3,4);
-	soduku.addNumber(3,4,5);
-	soduku.addNumber(3,5,9);
-	soduku.addNumber(3,6,2);
-	soduku.addNumber(3,7,1);
-	soduku.addNumber(3,8,6);
-	
-	soduku.addNumber(4,0,6);
-	soduku.addNumber(4,1,1);
-	soduku.addNumber(4,2,2);
-	soduku.addNumber(4,3,3);
-	soduku.addNumber(4,4,8);
-	soduku.addNumber(4,5,7);
-	soduku.addNumber(4,6,4);
-	soduku.addNumber(4,7,9);
-	soduku.addNumber(4,8,5);
-	
-	soduku.addNumber(5,0,5);
-	soduku.addNumber(5,1,4);
-	soduku.addNumber(5,2,9);
-	soduku.addNumber(5,3,2);
-	soduku.addNumber(5,4,1);
-	soduku.addNumber(5,5,6);
-	soduku.addNumber(5,6,7);
-	soduku.addNumber(5,7,3);
-	soduku.addNumber(5,8,8);
+	sudoku.addNumber(0,4,7);
+	sudoku.addNumber(1,3,1);
+	sudoku.addNumber(1,4,9);
+	sudoku.addNumber(1,5,5);
 
-	soduku.addNumber(6,0,7);
-	soduku.addNumber(6,1,6);
-	soduku.addNumber(6,2,3);
-	soduku.addNumber(6,3,5);
-	soduku.addNumber(6,4,2);
-	soduku.addNumber(6,5,4);
-	soduku.addNumber(6,6,1);
-	soduku.addNumber(6,7,8);
-	soduku.addNumber(6,8,9);
-	
-	soduku.addNumber(7,0,9);
-	soduku.addNumber(7,1,2);
-	soduku.addNumber(7,2,8);
-	soduku.addNumber(7,3,6);
-	soduku.addNumber(7,4,7);
-	soduku.addNumber(7,5,1);
-	soduku.addNumber(7,6,3);
-	soduku.addNumber(7,7,5);
-	soduku.addNumber(7,8,4);
-	
-	soduku.addNumber(8,0,1);
-	soduku.addNumber(8,1,5);
-	soduku.addNumber(8,2,4);
-	soduku.addNumber(8,3,9);
-	soduku.addNumber(8,4,3);
-	soduku.addNumber(8,5,8);
-	soduku.addNumber(8,6,6);
-	soduku.addNumber(8,7,7);
-	soduku.addNumber(8,8,2);
+	sudoku.addNumber(2,7,6);
 
-	soduku.printed();
+	sudoku.addNumber(3,0,8);
+	sudoku.addNumber(4,0,4);
+	sudoku.addNumber(5,0,7);
 	
-	if(soduku.checkSolved())
-		printf("solved\n");
-	
+	sudoku.addNumber(3,4,6);
+	sudoku.addNumber(4,3,8);
+	sudoku.addNumber(4,5,3);
+	sudoku.addNumber(5,4,2);
+
+	sudoku.addNumber(3,8,3);
+	sudoku.addNumber(4,8,1);
+	sudoku.addNumber(5,8,6);
+
+	sudoku.addNumber(6,1,6);
+
+	sudoku.addNumber(7,3,4);
+	sudoku.addNumber(7,4,1);
+	sudoku.addNumber(7,5,9);
+	sudoku.addNumber(8,4,8);
+
+	sudoku.addNumber(6,6,2);
+	sudoku.addNumber(6,7,8);
+	sudoku.addNumber(7,8,5);
+	sudoku.addNumber(8,7,7);
+	sudoku.addNumber(8,8,9);
+
+	sudoku.print();
+	tryBackTrackSolve(sudoku);
+	sudoku.print();
 	return 0;
 }

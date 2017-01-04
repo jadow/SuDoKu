@@ -1,5 +1,6 @@
 #ifndef _SUDOKU_HEADER_
 #include <vector>
+#include <stdio.h>
 
 class section
 {
@@ -41,9 +42,21 @@ public:
 	int getNumber(int y, int x);
 	int getHorizontalMax();
 	int getVerticalMax();
+	int getMaxValue();
 	bool checkSolved();
 
-	void printed();
+	void print()
+	{
+		printf("---------------------------------------------------------------\n");
+		for(int i=0; i<y; i++)
+		{	
+			for(int j=0; j<x; j++)
+				printf("%d ", sudoku[i][j]);
+
+			printf("\n");
+		}
+		printf("---------------------------------------------------------------\n");
+	}
 };
 
 #define _SUDOKU_HEADER_
