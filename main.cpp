@@ -5,7 +5,7 @@ int main()
 {
 	Sudoku_Solver solver;
 	solver.sudoku.print();
-	solver.tryBackTrackSolve();
+	solver.trySolveBackTrack();
 	solver.sudoku.print();
 	return 0;
 }

@@ -46,18 +46,26 @@ Sudoku_Solver::Sudoku_Solver(int size):sudoku(size)
 {
 
 }
-
-bool Sudoku_Solver::tryBackTrackSolve(int y, int x)
+bool Sudoku_Solver::findOne(Sudoku sudoku)
 {
-	if(y==9)
-	{
-		printf("\n");
-	}
+	addSudoku(solutions, sudoku);
+	return true;
+}
+
+bool Sudoku_Solver::findAll(Sudoku sudoku)
+{
+	addSudoku(solutions, sudoku);
+	return false;
+}
+
+bool Sudoku_Solver::recurveBackTrack(std::function<bool(Sudoku)> callback, int y, int x)
+{
 	if(sudoku.checkSolved())
 	{
-		return true;
+		return callback(sudoku); 
 	}
-	else if(!sudoku.getNumber(y,x))
+	
+	if(!sudoku.getNumber(y,x))
 	{
 		for(int i =1; i <= sudoku.getMaxValue(); i ++)
 		{	
@@ -67,7 +75,7 @@ bool Sudoku_Solver::tryBackTrackSolve(int y, int x)
 			int saveX=x, saveY=y;
 
 			getNext(sudoku.getHorizontalMax(), y, x);
-			if(tryBackTrackSolve( y, x))
+			if(trySolveBackTrack( y, x))
 				return true;
 					
 			x=saveX;
@@ -80,6 +88,16 @@ bool Sudoku_Solver::tryBackTrackSolve(int y, int x)
 	else    
 	{
 		getNext(sudoku.getHorizontalMax(), y, x);
-		return tryBackTrackSolve( y, x);
+		return trySolveBackTrack( y, x);
     }    
+}
+
+bool Sudoku_Solver::trySolveBackTrack(int y, int x)
+{
+	return recurveBackTrack(std::bind(&Sudoku_Solver::findOne, this, sudoku), y, x);
+}
+
+bool Sudoku_Solver::findAllBackTrack(int y, int x)
+{
+ 	return recurveBackTrack(std::bind(&Sudoku_Solver::findAll, this, sudoku), y, x);
 }
