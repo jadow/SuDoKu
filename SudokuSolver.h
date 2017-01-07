@@ -16,17 +16,17 @@ private:
 		}
 	}
 	
-	static bool copyCell(Sudoku destination, Sudoku target, int i, int j)
+	static bool copyCell(Sudoku &destination, Sudoku target, int i, int j)
 	{
 		return destination.addNumber(i, j, target.getNumber(i, j));
 	}
 
-	static bool compareCell(Sudoku destination, Sudoku target, int i, int j)
+	static bool compareCell(Sudoku &destination, Sudoku target, int i, int j)
 	{
 		return (destination.getNumber(i, j) == target.getNumber(i, j));
 	}
 	
-	static bool ForEachCell(Sudoku destination, Sudoku target, bool(*callback)(Sudoku destination, Sudoku target, int i, int j))
+	static bool ForEachCell(Sudoku &destination, Sudoku target, bool(*callback)(Sudoku &destination, Sudoku target, int i, int j))
 	{
 		if(target.getHorizontalMax() != destination.getHorizontalMax() ||
 			target.getVerticalMax() != destination.getVerticalMax() ||
@@ -37,16 +37,16 @@ private:
 		
 		for(int i=0; i<destination.getVerticalMax(); i++)
 		{
-			for(int j=0; i<destination.getHorizontalMax(); j++)
+			for(int j=0; j<destination.getHorizontalMax(); j++)
 			{
-				if(!callback(destination, target, i, j))
+					if(!callback(destination, target, i, j))
 					return false;
 			}
 		}
 		return true;
 	}
 
-	static bool copySudoku(Sudoku destination, Sudoku target)
+	static bool copySudoku(Sudoku &destination, Sudoku target)
 	{
 		return ForEachCell(destination, target, &copyCell);
 	}
@@ -56,7 +56,7 @@ private:
 		return ForEachCell(destination, target, &compareCell);
 	}
 
-	static bool addSudoku( std::vector<Sudoku> destination, Sudoku target)
+	static bool addSudoku( std::vector<Sudoku> &destination, Sudoku target)
 	{
 		for(int i =0; i < destination.size(); i++)
 		{
@@ -83,6 +83,7 @@ public:
 	Sudoku_Solver(int size);
 	bool trySolveBackTrack(int y=0, int x=0);
 	bool findAllBackTrack(int y=0, int x=0);
+	void printAll();
 };
 
 #endif //_SUDOKU_SOLVER_HEADER_
