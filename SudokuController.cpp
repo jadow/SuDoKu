@@ -1,53 +1,16 @@
-#include "SudokuSolver.h"
+#include "SudokuController.h"
 
-Sudoku_Solver::Sudoku_Solver():sudoku()
+Sudoku_Controller::Sudoku_Controller():sudoku()
 {
-	//test code
-	sudoku.addNumber(0,0,9);
-	sudoku.addNumber(0,2,6);
-	sudoku.addNumber(2,1,7);
-
-	sudoku.addNumber(0,4,7);
-	sudoku.addNumber(1,3,4);
-	sudoku.addNumber(2,4,2);
-	sudoku.addNumber(2,5,3);
-	
-	sudoku.addNumber(0,6,4);
-	sudoku.addNumber(0,8,3);
-	sudoku.addNumber(1,6,2);
-	sudoku.addNumber(2,7,1);
-
-	sudoku.addNumber(3,0,5);
-	sudoku.addNumber(4,1,4);
-	sudoku.addNumber(5,2,3);
-	
-	sudoku.addNumber(4,3,2);
-	sudoku.addNumber(4,5,8);
-
-	sudoku.addNumber(3,6,1);
-	sudoku.addNumber(4,7,6);
-	sudoku.addNumber(5,8,5);
-	
-	sudoku.addNumber(6,1,3);
-	sudoku.addNumber(7,2,7);
-	sudoku.addNumber(8,0,4);
-	sudoku.addNumber(8,2,5);
-
-	sudoku.addNumber(6,3,7);
-	sudoku.addNumber(7,5,5);
-	sudoku.addNumber(8,4,1);
-
-	sudoku.addNumber(6,7,5);
-	sudoku.addNumber(8,6,7);
-	sudoku.addNumber(8,8,8);
+	//init code
 }
 
-Sudoku_Solver::Sudoku_Solver(int size):sudoku(size)
+Sudoku_Controller::Sudoku_Controller(int size):sudoku(size)
 {
 
 }
 
-bool Sudoku_Solver::trySolveBackTrack(int y, int x)
+bool Sudoku_Controller::trySolveBackTrack(int y, int x)
 {
 	if(sudoku.checkSolved())
 	{
@@ -80,7 +43,26 @@ bool Sudoku_Solver::trySolveBackTrack(int y, int x)
     }    
 }
 
-bool Sudoku_Solver::findAllBackTrack(int y, int x)
+void Sudoku_Controller::clearAll()
+{
+	for(int i=0; i<sudoku.getHorizontalMax(); i++)
+		for(int j=0; i<sudoku.getVerticalMax(); i++)
+			sudoku.removeNumber(j,i);
+}
+
+void Sudoku_Controller::incrementBox(int y, int x)
+{
+	int tempt = sudoku.getNumber(y,x);
+	while(!sudoku.addNumber(y, x, ++tempt))
+	{
+		if(tempt == sudoku.getMaxValue())
+		{
+			tempt=0;
+		}
+	}
+}
+
+bool Sudoku_Controller::findAllBackTrack(int y, int x)
 {
 	if(sudoku.checkSolved())
 	{
@@ -114,7 +96,7 @@ bool Sudoku_Solver::findAllBackTrack(int y, int x)
     }    
 }
 
-void Sudoku_Solver::printAll()
+void Sudoku_Controller::printAll()
 {
 	printf("\n%d solution(s)\n", solutions.size());
 	for(int i =0 ; i < solutions.size(); i++)

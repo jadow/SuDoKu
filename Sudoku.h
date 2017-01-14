@@ -1,5 +1,5 @@
-#ifndef _SUDOKU_HEADER_
-#define _SUDOKU_HEADER_
+#ifndef _SUDOKU_MODEL_HEADER_
+#define _SUDOKU_MODEL_HEADER_
 #include <vector>
 #include <stdio.h>
 
@@ -60,5 +60,5 @@ public:
 	}
 };
 
-#endif //_SUDOKU_HEADER_
+#endif //_SUDOKU_MODEL_HEADER_
 

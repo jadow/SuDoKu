@@ -14,6 +14,7 @@
     <ProjectGuid>{8941CCC5-3FCE-4E35-BB3B-A6F0D8E8056C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Sudoku</RootNamespace>
+    <ProjectName>Sudoku_Model</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -76,10 +77,8 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sudoku.cpp" />
-    <ClCompile Include="SudokuSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SudokuSolver.h" />
     <ClInclude Include="Sudoku.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

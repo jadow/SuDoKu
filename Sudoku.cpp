@@ -138,7 +138,12 @@ bool Sudoku::addNumber(int y, int x, int num)
 	if(!valid_x(x) || !valid_y(y) || !valid_num(num))
 		return false;
 
-	if(vertical[y].checkNumber(num) && horizontal[x].checkNumber(num) 
+	else if(num == 0)
+	{
+		sudoku[y][x] = num;
+		return true;
+	}
+	else if(vertical[y].checkNumber(num) && horizontal[x].checkNumber(num) 
 		&& box[(y/sqrt_y)*sqrt_x+(x/sqrt_x)].checkNumber(num))
 	{
 		sudoku[y][x] = num;
