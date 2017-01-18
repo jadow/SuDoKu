@@ -1,13 +1,4 @@
-#include <windows.h>
-#include "SudokuController.h"
-
-#define button_size	40
-#define xOffset		6
-#define yOffset		48
-
-Sudoku_Controller* model;
-
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+#include "SudokuInterface.h"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow)
 {
@@ -26,7 +17,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 
     // Create the window.
 
-    HMENU hMenubar;
     HMENU hMenu;
 
     hMenu = CreateMenu();
@@ -67,6 +57,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 
     return 0;
 }
+
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
