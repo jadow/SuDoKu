@@ -65,9 +65,8 @@ private:
 		return true;
 	}
 		
-	Sudoku sudoku;
-
 public:
+	Sudoku sudoku;
 	std::vector<Sudoku> solutions;
 
 	Sudoku_Controller();

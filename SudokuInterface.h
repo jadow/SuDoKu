@@ -1,0 +1,4 @@
+#ifndef _SUDOKU_INTERFACE_H_
+#define _SUDOKU_INTERFACE_H_
+
+#endif //_SUDOKU_INTERFACE_H_

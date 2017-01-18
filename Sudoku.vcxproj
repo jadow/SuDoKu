@@ -14,7 +14,7 @@
     <ProjectGuid>{8941CCC5-3FCE-4E35-BB3B-A6F0D8E8056C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Sudoku</RootNamespace>
-    <ProjectName>Sudoku_Model</ProjectName>
+    <ProjectName>Sudoku</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -53,7 +53,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -77,9 +77,13 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sudoku.cpp" />
+    <ClCompile Include="SudokuController.cpp" />
+    <ClCompile Include="SudokuInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sudoku.h" />
+    <ClInclude Include="SudokuController.h" />
+    <ClInclude Include="SudokuInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
