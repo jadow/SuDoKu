@@ -181,6 +181,11 @@ int Sudoku::getMaxValue()
 	return y;
 }
 
+int Sudoku::getRootValue()
+{
+	return (sqrt_x == sqrt_y) ? sqrt_x : 0;
+}
+
 bool Sudoku::checkSolved()
 {
 	for(int i=0; i<y; i++)

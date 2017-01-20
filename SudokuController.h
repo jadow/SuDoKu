@@ -74,7 +74,8 @@ public:
 	bool trySolveBackTrack(int y=0, int x=0);
 	void clearAll();
 	void incrementBox(int y, int x);
-	
+
+
 	bool findAllBackTrack(int y=0, int x=0);
 	void printAll();
 };

@@ -46,20 +46,17 @@ bool Sudoku_Controller::trySolveBackTrack(int y, int x)
 void Sudoku_Controller::clearAll()
 {
 	for(int i=0; i<sudoku.getHorizontalMax(); i++)
-		for(int j=0; i<sudoku.getVerticalMax(); i++)
+		for(int j=0; j<sudoku.getVerticalMax(); j++)
 			sudoku.removeNumber(j,i);
+	
 }
 
 void Sudoku_Controller::incrementBox(int y, int x)
 {
 	int tempt = sudoku.getNumber(y,x);
 	while(!sudoku.addNumber(y, x, ++tempt))
-	{
-		if(tempt == sudoku.getMaxValue())
-		{
-			tempt=0;
-		}
-	}
+		if(tempt >= sudoku.getMaxValue())
+			tempt= -1;
 }
 
 bool Sudoku_Controller::findAllBackTrack(int y, int x)

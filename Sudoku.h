@@ -44,6 +44,7 @@ public:
 	int getHorizontalMax();
 	int getVerticalMax();
 	int getMaxValue();
+	int getRootValue();
 	bool checkSolved();
 
 	void print()
