@@ -11,86 +11,104 @@
 #define yOffset		48
 #define spacing		3
 
-Sudoku_Controller* model;
-static HFONT s_hFont = NULL;
-static HBITMAP hBitmap = NULL;
-
-static HWND currentHWND;
-static WPARAM currentWPARAM;
-
-static int MaxVertical;
-static int MaxHorizontal;
-static int boxes;
-static int MaxValue;
-static int rootValue;
-
 const wchar_t CLASS_NAME[]  = L"Sudoku";
 const wchar_t* fontName = L"Croobie";
 const long nFontSize = 30;
+static HFONT s_hFont = NULL;
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-void initialiseUI()
+class SudokuInterface 
 {
-	MaxVertical = model->sudoku.getVerticalMax();
-	MaxHorizontal = model->sudoku.getHorizontalMax();
-	boxes = MaxVertical * MaxHorizontal;
-	MaxValue = model->sudoku.getMaxValue();
-	rootValue = model->sudoku.getRootValue();
-}
+public:
+	Sudoku_Controller* model;
+	HWND currentHWND;
+	WPARAM currentWPARAM;
 
-wchar_t* convertNumberWstring(int i)
-{
-	wchar_t* tempt = new wchar_t[MAX_SIZE];
-	wsprintf(tempt, L"%d", i);
-	return tempt;
-}
+	int MaxVertical;
+	int MaxHorizontal;
+	int boxes;
+	int MaxValue;
+	int rootValue;
+	
+	void Init()
+	{
+		MaxVertical = model->sudoku.getVerticalMax();
+		MaxHorizontal = model->sudoku.getHorizontalMax();
+		boxes = MaxVertical * MaxHorizontal;
+		MaxValue = model->sudoku.getMaxValue();
+		rootValue = model->sudoku.getRootValue();
+		currentHWND = NULL;
+		currentWPARAM = NULL;
+	}
 
-HBRUSH getBackGroundColour()
-{
-	return (HBRUSH)GetStockObject(BLACK_BRUSH);
-}
+	SudokuInterface()
+	{
+		model = new Sudoku_Controller;
+		Init();
+	}
 
-HMENU createMenu()
-{
-    HMENU hMenu;
-    hMenu = CreateMenu();
-    AppendMenuW(hMenu, MF_STRING, IDC_SOLVE, L"&Solve");
-    AppendMenuW(hMenu, MF_STRING, IDC_CLEAR, L"&Clear");
-	return hMenu;
-}
+	SudokuInterface(int size)
+	{
+		model = new Sudoku_Controller(size);
+		Init();
+	}
 
-HFONT setFont( HDC hdc)
-{
-	LOGFONT logFont = {0};
-	logFont.lfHeight = -MulDiv(nFontSize, GetDeviceCaps(hdc, LOGPIXELSY), 72);
-	logFont.lfWeight = FW_BOLD;
-	wcscpy(logFont.lfFaceName, fontName);
-	return CreateFontIndirect(&logFont);
-}
+	static wchar_t* convertNumberWstring(int i)
+	{
+		wchar_t* tempt = new wchar_t[MAX_SIZE];
+		wsprintf(tempt, L"%d", i);
+		return tempt;
+	}
 
-void updateButton(HWND hwnd, WPARAM wParam, int y, int x)
-{
-	if(!model->sudoku.getNumber(y ,x))
-		SendMessage(::GetDlgItem(hwnd, wParam), WM_SETTEXT, 0, (LPARAM)L"");				 
-	else
-		SendMessage(::GetDlgItem(hwnd, wParam), WM_SETTEXT, 0, (LPARAM)convertNumberWstring(model->sudoku.getNumber(y ,x)));
-}
+	static HBRUSH getBackGroundColour()
+	{
+		return (HBRUSH)GetStockObject(BLACK_BRUSH);
+	}
 
-int getPosition(int i)
-{
-	return i*button_size + ((i/3)+1)*spacing;
-}
+	static HMENU createMenu()
+	{
+		HMENU hMenu;
+		hMenu = CreateMenu();
+		AppendMenuW(hMenu, MF_STRING, IDC_SOLVE, L"&Solve");
+		AppendMenuW(hMenu, MF_STRING, IDC_CLEAR, L"&Clear");
+		return hMenu;
+	}
 
-int getHeight()
-{
-	return getPosition(model->sudoku.getVerticalMax())+yOffset;
-}
+	static HFONT setFont( HDC hdc)
+	{
+		LOGFONT logFont = {0};
+		logFont.lfHeight = -MulDiv(nFontSize, GetDeviceCaps(hdc, LOGPIXELSY), 72);
+		logFont.lfWeight = FW_BOLD;
+		wcscpy(logFont.lfFaceName, fontName);
+		return CreateFontIndirect(&logFont);
+	}
 
-int getWidth()
-{
-	return getPosition(model->sudoku.getHorizontalMax())+xOffset;
-}
+	void updateButton(HWND hwnd, WPARAM wParam, int y, int x)
+	{
+		if(!model->sudoku.getNumber(y ,x))
+			SendMessage(::GetDlgItem(hwnd, wParam), WM_SETTEXT, 0, (LPARAM)L"");				 
+		else
+			SendMessage(::GetDlgItem(hwnd, wParam), WM_SETTEXT, 0, (LPARAM)convertNumberWstring(model->sudoku.getNumber(y ,x)));
+	}
+
+	int getPosition(int i)
+	{
+		return i*button_size + ((i/3)+1)*spacing;
+	}
+
+	int getHeight()
+	{
+		return getPosition(model->sudoku.getVerticalMax())+yOffset;
+	}
+
+	int getWidth()
+	{
+		return getPosition(model->sudoku.getHorizontalMax())+xOffset;
+	}
+};
+
+SudokuInterface* ViewHelper;
 
 
 

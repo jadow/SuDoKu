@@ -2,16 +2,15 @@
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow)
 {
-	model = new Sudoku_Controller;
-    HMENU hMenu = createMenu();
-	initialiseUI();
+	ViewHelper = new SudokuInterface();
+    HMENU hMenu = SudokuInterface::createMenu();
 
     WNDCLASS wc = { };
 
     wc.lpfnWndProc   = WindowProc;
     wc.hInstance     = hInstance;
     wc.lpszClassName = CLASS_NAME;
-	wc.hbrBackground = getBackGroundColour();
+	wc.hbrBackground = SudokuInterface::getBackGroundColour();
 
 
     RegisterClass(&wc);
@@ -23,8 +22,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
         (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX),            // Window style
         // Size and position
         CW_USEDEFAULT, CW_USEDEFAULT, 
-		getWidth(), 
-		getHeight(),
+		ViewHelper->getWidth(), 
+		ViewHelper->getHeight(),
         NULL,       // Parent window    
         hMenu,       // Menu
         hInstance,  // Instance handle
@@ -63,19 +62,19 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
-            s_hFont = setFont(hdc);
+            s_hFont = SudokuInterface::setFont(hdc);
 
-			for(int i=0; i<MaxHorizontal; i++)
+			for(int i=0; i<ViewHelper->MaxHorizontal; i++)
 			{
-				for(int j=0; j<MaxVertical; j++)
+				for(int j=0; j<ViewHelper->MaxVertical; j++)
 				{
 					HWND hwndButton = CreateWindow( 
 					L"BUTTON",  
 					L"",     
 					WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,  
-					getPosition(i), getPosition(j), button_size, button_size,
+					ViewHelper->getPosition(i), ViewHelper->getPosition(j), button_size, button_size,
 					hwnd,     
-					(HMENU)(IDC_BUTTON_0+(i+j*MaxHorizontal)),       
+					(HMENU)(IDC_BUTTON_0+(i+j*ViewHelper->MaxHorizontal)),       
 					(HINSTANCE)GetWindowLong(hwnd, GWL_HINSTANCE), 
 					NULL);  
 
@@ -95,14 +94,14 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
 			case IDC_SOLVE:
 				{
-					if(model->trySolveBackTrack())
+					if(ViewHelper->model->trySolveBackTrack())
 					{
-						for(int i=0; i<MaxHorizontal; i++)
+						for(int i=0; i<ViewHelper->MaxHorizontal; i++)
 						{
-							for(int j=0; j<MaxVertical; j++)
+							for(int j=0; j<ViewHelper->MaxVertical; j++)
 							{
-								SendMessage(::GetDlgItem(hwnd, IDC_BUTTON_0+(i+j*MaxHorizontal)), 
-									WM_SETTEXT, 0, (LPARAM)convertNumberWstring(model->sudoku.getNumber(j,i)));
+								SendMessage(::GetDlgItem(hwnd, IDC_BUTTON_0+(i+j*ViewHelper->MaxHorizontal)), 
+									WM_SETTEXT, 0, (LPARAM)ViewHelper->convertNumberWstring(ViewHelper->model->sudoku.getNumber(j,i)));
 							}
 						}	
 					}
@@ -111,8 +110,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			case IDC_CLEAR:
 				{
-					model->clearAll();
-					for(int i=0; i<boxes; i++)
+					ViewHelper->model->clearAll();
+					for(int i=0; i<ViewHelper->boxes; i++)
 						SendMessage(GetDlgItem(hwnd, IDC_BUTTON_0+i), WM_SETTEXT, 0, (LPARAM)L"");
 
 					return 0;
@@ -121,10 +120,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			default: //buttons
 				{
 					int tempt = wParam - IDC_BUTTON_0;
-					int y = tempt/MaxHorizontal;
-					int x = tempt%MaxHorizontal;
-					model->incrementBox(y, x); 
-					updateButton(hwnd, wParam, y, x);
+					int y = tempt/ViewHelper->MaxHorizontal;
+					int x = tempt%ViewHelper->MaxHorizontal;
+					ViewHelper->model->incrementBox(y, x); 
+					ViewHelper->updateButton(hwnd, wParam, y, x);
 
 					return 0;
 				}
