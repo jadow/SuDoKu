@@ -65,19 +65,26 @@ private:
 		return true;
 	}
 		
-public:
 	Sudoku sudoku;
+public:
 	std::vector<Sudoku> solutions;
 
 	Sudoku_Controller();
 	Sudoku_Controller(int size);
+	
+	int getVerticalMax();
+	int getHorizontalMax();
+	int totalBoxes();
+	int getMaxValue();
+	int getRootValue();
+	int getBoxValue(int y, int x);
+
 	bool trySolveBackTrack(int y=0, int x=0);
+	bool trySolveBackTrack(void(*callback)(int y, int x), int y=0, int x=0);
 	void clearAll();
 	void incrementBox(int y, int x);
 
-
 	bool findAllBackTrack(int y=0, int x=0);
-	void printAll();
 };
 
 #endif //_SUDOKU_CONTROLLER_HEADER_

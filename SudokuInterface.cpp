@@ -2,16 +2,15 @@
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow)
 {
-	ViewHelper = new SudokuInterface();
-    HMENU hMenu = SudokuInterface::createMenu();
+	model = new Sudoku_Controller();
+    HMENU hMenu = createMenu();
 
     WNDCLASS wc = { };
 
     wc.lpfnWndProc   = WindowProc;
     wc.hInstance     = hInstance;
     wc.lpszClassName = CLASS_NAME;
-	wc.hbrBackground = SudokuInterface::getBackGroundColour();
-
+	wc.hbrBackground = getBackGroundColour();
 
     RegisterClass(&wc);
 
@@ -22,8 +21,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
         (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX),            // Window style
         // Size and position
         CW_USEDEFAULT, CW_USEDEFAULT, 
-		ViewHelper->getWidth(), 
-		ViewHelper->getHeight(),
+		getWidth(), 
+		getHeight(),
         NULL,       // Parent window    
         hMenu,       // Menu
         hInstance,  // Instance handle
@@ -36,8 +35,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
     }
 
     ShowWindow(hwnd, nCmdShow);
-
-    // Run the message loop.
 
     MSG msg = { };
     while (GetMessage(&msg, NULL, 0, 0))
@@ -62,26 +59,23 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
-            s_hFont = SudokuInterface::setFont(hdc);
+            s_hFont = setFont(hdc);
 
-			for(int i=0; i<ViewHelper->MaxHorizontal; i++)
+			for(int i=0; i<model->totalBoxes(); i++)
 			{
-				for(int j=0; j<ViewHelper->MaxVertical; j++)
-				{
-					HWND hwndButton = CreateWindow( 
-					L"BUTTON",  
-					L"",     
-					WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,  
-					ViewHelper->getPosition(i), ViewHelper->getPosition(j), button_size, button_size,
-					hwnd,     
-					(HMENU)(IDC_BUTTON_0+(i+j*ViewHelper->MaxHorizontal)),       
-					(HINSTANCE)GetWindowLong(hwnd, GWL_HINSTANCE), 
-					NULL);  
+				HWND hwndButton = CreateWindow( 
+				L"BUTTON",  
+				L"",     
+				WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,  
+				getOffset(getHorizontalPos(i)), getOffset(getVerticalPos(i)), 
+				button_size, button_size,
+				hwnd, 
+				(HMENU)(IDC_BUTTON_0+i),       
+				(HINSTANCE)GetWindowLong(hwnd, GWL_HINSTANCE), 
+				NULL);  
 
-					if(s_hFont)
-						SendMessage(hwndButton, WM_SETFONT, (WPARAM)s_hFont, (LPARAM)MAKELONG(TRUE, 0));
-
-				}
+				if(s_hFont)
+					SendMessage(hwndButton, WM_SETFONT, (WPARAM)s_hFont, (LPARAM)MAKELONG(TRUE, 0));
 			}
 
             EndPaint(hwnd, &ps);
@@ -94,24 +88,19 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
 			case IDC_SOLVE:
 				{
-					if(ViewHelper->model->trySolveBackTrack())
-					{
-						for(int i=0; i<ViewHelper->MaxHorizontal; i++)
-						{
-							for(int j=0; j<ViewHelper->MaxVertical; j++)
-							{
-								SendMessage(::GetDlgItem(hwnd, IDC_BUTTON_0+(i+j*ViewHelper->MaxHorizontal)), 
-									WM_SETTEXT, 0, (LPARAM)ViewHelper->convertNumberWstring(ViewHelper->model->sudoku.getNumber(j,i)));
-							}
-						}	
-					}
+					currentHWND = hwnd;
+					if(model->trySolveBackTrack(updateButton))
+						/*for(int i=0; i<model->totalBoxes(); i++)
+								SendMessage(GetDlgItem(hwnd, IDC_BUTTON_0+i), WM_SETTEXT, 0, 
+								(LPARAM)convertNumberWstring(model->getBoxValue(getHorizontalPos(i), getVerticalPos(i))));*/
+
 					return 0;
 				}
 
 			case IDC_CLEAR:
 				{
-					ViewHelper->model->clearAll();
-					for(int i=0; i<ViewHelper->boxes; i++)
+					model->clearAll();
+					for(int i=0; i<model->totalBoxes(); i++)
 						SendMessage(GetDlgItem(hwnd, IDC_BUTTON_0+i), WM_SETTEXT, 0, (LPARAM)L"");
 
 					return 0;
@@ -119,11 +108,11 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			default: //buttons
 				{
-					int tempt = wParam - IDC_BUTTON_0;
-					int y = tempt/ViewHelper->MaxHorizontal;
-					int x = tempt%ViewHelper->MaxHorizontal;
-					ViewHelper->model->incrementBox(y, x); 
-					ViewHelper->updateButton(hwnd, wParam, y, x);
+					int y = getVerticalPos(wParam - IDC_BUTTON_0);
+					int x = getHorizontalPos(wParam - IDC_BUTTON_0);
+					model->incrementBox(y, x); 
+					currentHWND = hwnd;
+					updateButton(y, x);
 
 					return 0;
 				}
